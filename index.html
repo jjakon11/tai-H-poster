@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#18231c">
-  <meta name="description" content="輸入胸徑 DBH，預測臺灣闊葉林樹高，並和現場每位參與者一起長出一片資料森林。">
+  <meta name="description" content="輸入胸徑 DBH，預測臺灣闊葉林樹高，與您一起長出一片資料森林。">
   <title>Tai-H App｜臺灣樹高預測</title>
   <style>
     :root{--ink:#eef4e9;--muted:#aebbad;--forest:#121b16;--forest2:#1b2820;--paper:#f1eee5;--paperInk:#202a23;--green:#50bd68;--bright:#72dd84;--ochre:#c8b27e;--line:rgba(255,255,255,.12);color-scheme:dark}
@@ -39,7 +39,7 @@
       <div class="ascii" aria-hidden="true"><span>／╲＿／╲</span><span class="tree">│</span><br><span>（  o.o  ）</span><span class="tree">╱▲╲</span><br><span>　&gt;  H  &lt;</span><span class="tree">╱▲▲╲</span></div>
       <p class="eyebrow">TAIWAN BROADLEAF FOREST · TREE HEIGHT MODEL</p>
       <h1><em>Tai-H App</em></h1>
-      <p class="intro">臺灣闊葉林樹高預測系統</p>
+      <p class="intro">臺灣闊葉林樹高預測系統 </p>
     </section>
   </header>
 
@@ -50,9 +50,9 @@
         <label for="model">預測模型</label>
         <select id="model">
           <option value="M1">M1 · 基礎公式</option>
-          <option value="M2">M2 · 樣區為隨機變數</option>
-          <option value="M3">M3 · 物種為隨機變數</option>
-          <option value="M4">M4 · 樣區／物種巢狀層級</option>
+          <option value="M2">M2 · 樣區為隨機效應</option>
+          <option value="M3">M3 · 物種為隨機效應</option>
+          <option value="M4">M4 · 樣區／物種巢狀層級為隨機效應</option>
           <option value="M5">M5 · 生態變量全模型</option>
         </select>
         <p class="modelSummary" id="modelSummary">M1 使用全資料的基礎 Richards 曲線。</p>
@@ -70,8 +70,8 @@
       <div class="quick" aria-label="快速選擇 DBH"><button type="button" data-value="10">10</button><button type="button" data-value="20">20</button><button type="button" data-value="40">40</button><button type="button" data-value="80">80</button></div>
       <div class="prediction" aria-live="polite"><span>即時預測樹高</span><strong><span id="heightValue">—</span><small> m</small></strong><span class="interval">95% 預測誤差範圍：± <span id="marginValue">—</span> m</span><p>H = 1.3 + a × (1 − exp(−c × DBH))<sup>b</sup></p></div>
       <button class="submit" id="submitButton" type="submit"><span>把我的點加入森林</span><span aria-hidden="true">↗</span></button>
-      <p class="message error" id="errorMessage" role="alert"></p><p class="message success" id="successMessage" role="status">你的點已加入這片資料森林！</p>
-      <p class="privacy">不收集姓名；只會保存 DBH、預測值、匿名裝置代碼與提交時間。</p>
+      <p class="message error" id="errorMessage" role="alert"></p><p class="message success" id="successMessage" role="status">你的樹已經種在這片資料森林！恭喜種樹成功</p>
+      <p class="privacy">不收集個人資料；只會保存 DBH、預測值、匿名裝置代碼與提交時間。</p>
     </form>
 
     <section class="chartCard" id="forestChart">
@@ -84,7 +84,7 @@
   </section>
 
   <aside class="setup" id="setupNotice"><strong>網站版面已完成，尚未連接 Firebase。</strong>請依同資料夾的「上線說明」把 Firebase 設定貼到 <code>index.html</code> 的 <code>firebaseConfig</code>，共同點位就會啟用。</aside>
-  <footer><div><span class="mark small">H</span><p><strong>Tai-H App</strong><br>臺灣闊葉林樹高預測系統</p></div><p>Models M1–M5 · Richards growth function<br>Poster interactive edition</p></footer>
+  <footer><div><span class="mark small">H</span><p><strong>Tai-H App</strong><br>臺灣闊葉林樹高預測系統 （系統還在測試當中，請等待我們最終的文章發表）</p></div><p>Models M1–M5 · Richards growth function<br>Poster interactive edition</p></footer>
 </main>
 
 <script type="module">
