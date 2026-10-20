@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#18231c">
+  <meta name="description" content="輸入胸徑 DBH，預測臺灣闊葉林樹高，並和現場每位參與者一起長出一片資料森林。">
+  <title>Tai-H App｜臺灣樹高預測</title>
+  <style>
+    :root{--ink:#eef4e9;--muted:#aebbad;--forest:#121b16;--forest2:#1b2820;--paper:#f1eee5;--paperInk:#202a23;--green:#50bd68;--bright:#72dd84;--ochre:#c8b27e;--line:rgba(255,255,255,.12);color-scheme:dark}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--forest);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif}button,input{font:inherit}button{-webkit-tap-highlight-color:transparent}.shell{min-height:100vh;overflow:hidden;background:linear-gradient(180deg,var(--forest) 0 35%,var(--paper) 35% 92%,#dfe4d9 92%)}
+    .hero{position:relative;min-height:540px;padding:0 24px 120px;background:radial-gradient(circle at 80% 25%,rgba(79,183,101,.14),transparent 30%),linear-gradient(155deg,#1f2a24 0%,#222621 55%,#151b17 100%)}.hero:after{content:"";position:absolute;inset:auto 0 0;height:90px;background:linear-gradient(174deg,transparent 48%,var(--paper) 49%)}.glow{position:absolute;width:440px;height:440px;right:-220px;top:70px;border:1px solid rgba(114,221,132,.16);border-radius:50%;box-shadow:0 0 0 74px rgba(114,221,132,.025),0 0 0 148px rgba(114,221,132,.018)}
+    nav{position:relative;z-index:2;width:min(1120px,100%);margin:auto;padding:23px 0;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.09)}.brand{display:flex;align-items:center;gap:11px;color:var(--ink);text-decoration:none;font-weight:800;letter-spacing:-.02em}.mark{display:grid;place-items:center;width:36px;aspect-ratio:1;border:1px solid rgba(114,221,132,.55);border-radius:9px 9px 9px 3px;color:var(--bright);font-family:Georgia,serif;font-style:italic}.mark.small{width:31px}.live,.sync{display:flex;align-items:center;gap:8px}.live{padding:7px 11px;border:1px solid var(--line);border-radius:999px;color:#ccd7ca;font-size:12px}.live i,.sync i{width:7px;height:7px;background:var(--bright);border-radius:50%;box-shadow:0 0 0 5px rgba(114,221,132,.1);animation:pulse 2s infinite}@keyframes pulse{50%{opacity:.45}}
+    .heroCopy{position:relative;z-index:1;width:min(850px,100%);margin:76px auto 0;text-align:center}.ascii{margin-bottom:20px;color:#cc7832;font:700 13px/1.25 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:1px;white-space:nowrap}.ascii .tree{display:inline-block;margin-left:24px;color:#8fcf91}.eyebrow{color:var(--ochre);font-size:11px;font-weight:800;letter-spacing:.19em}.hero h1{margin:15px 0 18px;font-size:clamp(41px,7vw,78px);line-height:.99;letter-spacing:-.055em;font-weight:900}.hero h1 .titleLine{white-space:nowrap}.hero h1 em{color:var(--bright);font-family:Georgia,"Noto Serif TC",serif;font-weight:500}.intro{max-width:650px;margin:auto;color:#bdc8bb;font-size:clamp(15px,2vw,18px);line-height:1.75}
+    .grid{position:relative;z-index:2;width:min(1160px,calc(100% - 40px));margin:-85px auto 90px;display:grid;grid-template-columns:360px minmax(0,1fr);gap:20px;align-items:start}.inputCard,.chartCard{border:1px solid rgba(35,51,41,.13);border-radius:22px;box-shadow:0 24px 70px rgba(16,28,20,.14)}.inputCard{padding:27px;background:#fbfaf5;color:var(--paperInk)}.chartCard{min-width:0;padding:27px;background:var(--forest2)}.step{display:flex;align-items:center;gap:10px;color:#6c796e;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}.step span{display:grid;place-items:center;width:27px;height:27px;border:1px solid #a7b4a8;border-radius:50%;font-size:10px}.chartCard .step{color:#93a397}.chartCard .step span{border-color:#536459}
+    label{display:block;margin-top:26px;font-size:13px;font-weight:800;letter-spacing:.08em}label small{color:#788479;font-size:11px}.selectField label,.m5Grid label{margin-top:18px}.selectField select,.m5Grid select{width:100%;height:46px;margin-top:7px;padding:0 38px 0 12px;border:1px solid #b9c4ba;border-radius:10px;outline:none;background:#fff;color:#263128;font-size:13px;font-weight:650}.selectField select:focus,.m5Grid select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(80,189,104,.1)}.modelSummary{margin:8px 0 0;color:#758078;font-size:11px;line-height:1.5}.m5Options{margin:12px 0 3px;padding:1px 13px 14px;border:1px solid #d9dfd6;border-radius:12px;background:#f4f4ee}.m5Options[hidden]{display:none}.m5Grid{display:grid;grid-template-columns:1fr;gap:0}.number{position:relative;margin-top:9px}.number input{width:100%;height:75px;padding:0 76px 0 18px;border:2px solid #9aab9d;border-radius:14px;outline:none;background:white;color:#18231b;font-size:35px;font-weight:850;font-variant-numeric:tabular-nums;transition:.2s}.number input:focus{border-color:var(--green);box-shadow:0 0 0 4px rgba(80,189,104,.12)}.number span{position:absolute;right:18px;top:50%;transform:translateY(-50%);color:#738077;font-weight:700}.help{margin:8px 0 0;color:#758078;font-size:12px}.quick{display:flex;gap:7px;margin-top:14px}.quick button{flex:1;padding:8px 4px;border:1px solid #cfd6ce;border-radius:9px;background:#f3f3ed;color:#57645a;font-size:12px;font-weight:700;cursor:pointer}.quick button:active{transform:translateY(1px)}
+    .prediction{margin-top:23px;padding:19px;border-radius:14px;background:#1d2921;color:var(--ink)}.prediction>span{color:#a8b5aa;font-size:12px}.prediction strong{display:block;margin:1px 0 4px;color:var(--bright);font-size:42px;line-height:1.1;font-variant-numeric:tabular-nums;letter-spacing:-.04em}.prediction strong small{font-size:18px}.prediction .interval{display:block;margin-bottom:8px;color:#aeb9b0;font-size:11px}.prediction p{margin:0;color:#78887d;font:10px/1.5 ui-monospace,monospace}.submit{width:100%;min-height:54px;margin-top:17px;padding:13px 18px;border:0;border-radius:12px;background:var(--green);color:white;font-weight:800;cursor:pointer;box-shadow:0 9px 20px rgba(42,141,65,.21);display:flex;justify-content:space-between;align-items:center}.submit:disabled{cursor:not-allowed;filter:grayscale(.45);opacity:.65}.submit:not(:disabled):hover{background:#45ac5c}.message{display:none;margin:12px 0 0;padding:10px 12px;border-radius:9px;font-size:12px;font-weight:700}.message.show{display:block}.message.error{background:#f9dedb;color:#8b2821}.message.success{background:#dff4e2;color:#226f35}.privacy{margin:14px 0 0;color:#7b867d;text-align:center;font-size:10px}
+    .setup{display:none;width:min(1160px,calc(100% - 40px));margin:-55px auto 72px;padding:18px 21px;border:1px solid #e2b45b;border-radius:14px;background:#fff5dc;color:#624a19;font-size:13px;line-height:1.6}.setup.show{display:block}.setup strong{display:block}.setup code{padding:2px 5px;border-radius:4px;background:#f1dfb4;color:#624a19}
+    .chartHead{display:flex;align-items:flex-start;justify-content:space-between;gap:20px}.chartHead h2{margin:12px 0 0;font-family:Georgia,"Noto Serif TC",serif;font-size:clamp(24px,3vw,34px);font-weight:500;letter-spacing:-.025em}.counter{flex:0 0 auto;min-width:102px;padding-left:20px;border-left:1px solid var(--line);text-align:right}.counter strong{display:block;color:var(--bright);font-size:34px;line-height:1;font-variant-numeric:tabular-nums}.counter span{color:#91a095;font-size:11px}.chartWrap{position:relative;min-height:340px;margin-top:15px;border:1px solid rgba(255,255,255,.07);border-radius:14px;background:#162119;overflow:hidden}.chartWrap canvas{display:block;width:100%;height:430px}.loading{position:absolute;inset:0;display:grid;place-items:center;background:rgba(22,33,25,.76);color:#b6c1b8;font-size:13px}.chartFoot{display:flex;justify-content:space-between;gap:15px;margin-top:14px;color:#8f9e92;font-size:11px}.chartFoot p{margin:0;display:flex;align-items:center;gap:7px}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-left:7px}.dot:first-child{margin-left:0}.dot.previous{background:#d5ad69}.dot.yours{background:#ff7c58}.modelKeys{display:flex;flex-wrap:wrap;gap:5px 10px;margin-top:12px;color:#78897d;font-size:10px}.modelKeys span{display:flex;align-items:center;gap:4px}.modelKeys i{width:7px;height:7px;border-radius:50%}.recent{display:none;gap:8px;align-items:center;flex-wrap:wrap;margin-top:14px;padding-top:15px;border-top:1px solid var(--line);font-size:10px;color:#7e8f83}.recent.show{display:flex}.recent b{padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.055);color:#acb9ae;font-weight:650}
+    footer{width:min(1120px,calc(100% - 40px));margin:auto;padding:34px 0 48px;border-top:1px solid #bcc5ba;color:#526057;display:flex;justify-content:space-between;align-items:center;gap:30px;font-size:11px}footer>div{display:flex;align-items:center;gap:11px}footer p{margin:0;line-height:1.55}footer>p{text-align:right}
+    @media(max-width:850px){.shell{background:linear-gradient(180deg,var(--forest) 0 29%,var(--paper) 29% 94%,#dfe4d9 94%)}.hero{min-height:520px;padding-bottom:120px}.heroCopy{margin-top:58px}.grid{grid-template-columns:1fr;max-width:650px;margin-top:-78px}.inputCard{padding:24px}.chartCard{padding:22px 15px}.setup{margin-top:-35px}}
+    @media(max-width:520px){.hero{min-height:510px;padding-inline:18px}.glow{opacity:.55}nav{padding-top:17px}.live{font-size:10px}.heroCopy{margin-top:54px}.hero h1{font-size:clamp(34px,11vw,43px)}.intro{font-size:14px}.eyebrow{font-size:9px;letter-spacing:.12em}.ascii{font-size:11px}.grid{width:calc(100% - 24px);gap:13px;margin-bottom:55px}.inputCard,.chartCard{border-radius:17px}.chartHead{align-items:center}.chartHead h2{font-size:22px}.counter{min-width:72px;padding-left:12px}.counter strong{font-size:28px}.chartWrap{min-height:290px;margin-inline:-7px}.chartWrap canvas{height:330px}.chartFoot{flex-direction:column}.recent{display:none!important}.setup{width:calc(100% - 24px)}footer{align-items:flex-start}footer>p{display:none}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important}}
+    /* 簡潔版：貼近原 Shiny 的 Bootstrap 白卡與深色標頭 */
+    body{background:#f3f4f1;color:#273028}.shell{background:#f3f4f1}.hero{min-height:285px;padding:0 20px 65px;background:linear-gradient(160deg,#1f2a24 0%,#2b2b2b 62%,#1e1e1e 100%);box-shadow:0 2px 12px rgba(0,0,0,.18)}.hero:after,.glow{display:none}nav{max-width:1080px;padding:16px 0}.heroCopy{margin:24px auto 0}.ascii{margin-bottom:8px;font-size:11px}.eyebrow{display:none}.hero h1{margin:6px 0 2px;font-size:clamp(38px,6vw,58px);letter-spacing:-.035em}.hero h1 .titleLine{white-space:normal}.hero h1 em{color:#ebf2e6;font-family:inherit;font-style:normal;font-weight:900}.intro{color:#c8b68a;font-size:17px;font-weight:600;line-height:1.5}.grid{max-width:1120px;margin:-35px auto 45px;grid-template-columns:340px minmax(0,1fr);gap:16px}.inputCard,.chartCard{border:1px solid #d8ddd7;border-radius:7px;box-shadow:0 3px 12px rgba(27,43,31,.08)}.inputCard,.chartCard{background:#fff;color:#273028}.inputCard{padding:21px}.chartCard{padding:21px}.step,.chartCard .step{color:#55635a;letter-spacing:.04em}.step span,.chartCard .step span{border-color:#aeb8b0}.chartHead h2{font-family:inherit;font-size:24px;font-weight:700}.counter{border-left-color:#dce1dc}.counter strong{color:#3c9e52}.counter span,.chartFoot,.modelKeys,.recent{color:#6d776f}.chartWrap{background:#fff;border-color:#dfe3df;border-radius:5px}.prediction{background:#f3f8f3;border:1px solid #d6e7d8;color:#243127}.prediction>span,.prediction .interval{color:#5c6b60}.prediction strong{color:#318a45}.prediction p{color:#7b877e}.submit{border-radius:5px;box-shadow:none}.setup{margin:-20px auto 45px}.modelKeys i{box-shadow:0 0 0 1px rgba(0,0,0,.12)}footer{padding-top:25px}
+    @media(max-width:850px){.hero{min-height:270px;padding-bottom:60px}.heroCopy{margin-top:18px}.grid{grid-template-columns:1fr;max-width:650px;margin-top:-30px}.chartCard{padding:18px 12px}}
+    @media(max-width:520px){.hero{min-height:260px;padding-inline:16px}.heroCopy{margin-top:15px}.hero h1{font-size:39px}.intro{font-size:15px}.grid{width:calc(100% - 20px);margin-top:-24px}.inputCard{padding:18px}.chartHead h2{font-size:20px}}
+  </style>
+</head>
+<body>
+<main class="shell">
+  <header class="hero" id="top">
+    <div class="glow"></div>
+    <nav>
+      <a class="brand" href="#top"><span class="mark">H</span><span>Tai-H App</span></a>
+      <span class="live"><i></i>海報互動中</span>
+    </nav>
+    <section class="heroCopy">
+      <div class="ascii" aria-hidden="true"><span>／╲＿／╲</span><span class="tree">│</span><br><span>（  o.o  ）</span><span class="tree">╱▲╲</span><br><span>　&gt;  H  &lt;</span><span class="tree">╱▲▲╲</span></div>
+      <p class="eyebrow">TAIWAN BROADLEAF FOREST · TREE HEIGHT MODEL</p>
+      <h1><em>Tai-H App</em></h1>
+      <p class="intro">臺灣闊葉林樹高預測系統</p>
+    </section>
+  </header>
+
+  <section class="grid" aria-label="樹高預測工具">
+    <form class="inputCard" id="predictionForm">
+      <div class="step"><span>01</span>選模型與輸入胸徑</div>
+      <div class="selectField">
+        <label for="model">預測模型</label>
+        <select id="model">
+          <option value="M1">M1 · 基礎公式</option>
+          <option value="M2">M2 · 樣區為隨機變數</option>
+          <option value="M3">M3 · 物種為隨機變數</option>
+          <option value="M4">M4 · 樣區／物種巢狀層級</option>
+          <option value="M5">M5 · 生態變量全模型</option>
+        </select>
+        <p class="modelSummary" id="modelSummary">M1 使用全資料的基礎 Richards 曲線。</p>
+      </div>
+      <div class="m5Options" id="m5Options" hidden>
+        <div class="m5Grid">
+          <div><label for="forestType">森林類型</label><select id="forestType"><option value="Primary">Primary</option><option value="Secondary Forest">Secondary Forest</option></select></div>
+          <div><label for="lifeForm">生活型</label><select id="lifeForm"><option value="Shrub">Shrub</option><option value="Trees">Trees</option></select></div>
+          <div><label for="tolerance">耐陰性</label><select id="tolerance"><option value="tolerant">tolerant</option><option value="midtolerant">midtolerant</option><option value="intolerant">intolerant</option></select></div>
+        </div>
+      </div>
+      <label for="dbh">DBH <small>cm</small></label>
+      <div class="number"><input id="dbh" inputmode="decimal" type="number" min="1" max="300" step="0.1" value="20" aria-describedby="dbhHelp"><span>cm</span></div>
+      <p class="help" id="dbhHelp">請輸入離地 1.3 m 處的樹幹直徑</p>
+      <div class="quick" aria-label="快速選擇 DBH"><button type="button" data-value="10">10</button><button type="button" data-value="20">20</button><button type="button" data-value="40">40</button><button type="button" data-value="80">80</button></div>
+      <div class="prediction" aria-live="polite"><span>即時預測樹高</span><strong><span id="heightValue">—</span><small> m</small></strong><span class="interval">95% 預測誤差範圍：± <span id="marginValue">—</span> m</span><p>H = 1.3 + a × (1 − exp(−c × DBH))<sup>b</sup></p></div>
+      <button class="submit" id="submitButton" type="submit"><span>把我的點加入森林</span><span aria-hidden="true">↗</span></button>
+      <p class="message error" id="errorMessage" role="alert"></p><p class="message success" id="successMessage" role="status">你的點已加入這片資料森林！</p>
+      <p class="privacy">不收集姓名；只會保存 DBH、預測值、匿名裝置代碼與提交時間。</p>
+    </form>
+
+    <section class="chartCard" id="forestChart">
+      <div class="chartHead"><div><div class="step"><span>02</span>預測結果與共同圖表</div><h2>推估臺灣闊葉林樹高</h2></div><div class="counter"><strong id="pointCount">0</strong><span>累積點位</span></div></div>
+      <div class="chartWrap"><canvas id="chart" role="img" aria-label="訪客 DBH 與預測樹高散點圖"></canvas><div class="loading" id="loading">正在連接資料森林…</div></div>
+      <div class="chartFoot"><p><i class="dot previous"></i>M1–M5 訪客點位 <i class="dot yours"></i>你剛加入的點</p><p class="sync"><i></i>即時同步</p></div>
+      <div class="modelKeys"><span><i style="background:#d5ad69"></i>M1</span><span><i style="background:#72dd84"></i>M2</span><span><i style="background:#65b8ff"></i>M3</span><span><i style="background:#d894ff"></i>M4</span><span><i style="background:#ff9f68"></i>M5</span></div>
+      <div class="recent" id="recent"><span>最新加入</span></div>
+    </section>
+  </section>
+
+  <aside class="setup" id="setupNotice"><strong>網站版面已完成，尚未連接 Firebase。</strong>請依同資料夾的「上線說明」把 Firebase 設定貼到 <code>index.html</code> 的 <code>firebaseConfig</code>，共同點位就會啟用。</aside>
+  <footer><div><span class="mark small">H</span><p><strong>Tai-H App</strong><br>臺灣闊葉林樹高預測系統</p></div><p>Models M1–M5 · Richards growth function<br>Poster interactive edition</p></footer>
+</main>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
+
+  /* ① 在 Firebase Console 註冊 Web App 後，把這六個值換成你的設定。 */
+  const firebaseConfig = {
+    apiKey: "AIzaSyC6uAervrlKPRxaRwQPmAK_nwW7eRx_HaY",
+    authDomain: "tree-height-prediction.firebaseapp.com",
+    projectId: "tree-height-prediction",
+    storageBucket: "tree-height-prediction.firebasestorage.app",
+    messagingSenderId: "78984115754",
+    appId: "1:78984115754:web:d179775449d52b9ff5b553"
+  };
+
+  /* 最終 M1–M5 係數：來源 ultimate_master_table.Rdata */
+  const BASE_MODELS = {
+    M1: { a: 16.019981827244916, b: 1.0696160185804522, c: 0.054211525901794788, sigma: 0.54065903634248913, varStruct: 0.63697960373991969 },
+    M2: { a: 16.967280282563348, b: 1.0575561087411283, c: 0.055682563517886710, sigma: 0.54392136266403590, varStruct: 0.59359306515452348 },
+    M3: { a: 13.074189922180002, b: 1.0520013548373839, c: 0.073527466185476634, sigma: 0.50893367867252293, varStruct: 0.59234784097697946 },
+    M4: { a: 13.876506431653848, b: 1.0625824070951135, c: 0.075153200569933298, sigma: 0.51071478621159694, varStruct: 0.57946964651378230 }
+  };
+  const M5_A = {
+    "Primary|Shrub|tolerant": 12.266079798598419,
+    "Secondary Forest|Shrub|tolerant": 13.725188834621635,
+    "Primary|Trees|tolerant": 13.180385598118386,
+    "Secondary Forest|Trees|tolerant": 14.639494634141602,
+    "Primary|Shrub|midtolerant": 12.337069653589911,
+    "Secondary Forest|Shrub|midtolerant": 13.796178689613127,
+    "Primary|Trees|midtolerant": 13.251375453109878,
+    "Secondary Forest|Trees|midtolerant": 14.710484489133094,
+    "Primary|Shrub|intolerant": 13.371831185233638,
+    "Secondary Forest|Shrub|intolerant": 14.830940221256856,
+    "Primary|Trees|intolerant": 14.286136984753607,
+    "Secondary Forest|Trees|intolerant": 15.745246020776822
+  };
+  const M5_COMMON = { b: 1.0609206354206662, c: 0.075074972446543972, sigma: 0.51071082474754159, varStruct: 0.57949641810054087 };
+  const MODEL_COLORS = { M1: "#d5ad69", M2: "#72dd84", M3: "#65b8ff", M4: "#d894ff", M5: "#ff9f68" };
+  const MODEL_SUMMARIES = {
+    M1: "M1 使用全資料的基礎 Richards 曲線。",
+    M2: "M2 納入樣區層級的隨機變異。",
+    M3: "M3 納入物種層級的隨機變異。",
+    M4: "M4 納入樣區／物種巢狀層級的隨機變異。",
+    M5: "M5 依森林類型、生活型與耐陰性調整曲線。"
+  };
+  const $ = (selector) => document.querySelector(selector);
+  const dbhInput = $("#dbh");
+  const modelSelect = $("#model");
+  const forestTypeSelect = $("#forestType");
+  const lifeFormSelect = $("#lifeForm");
+  const toleranceSelect = $("#tolerance");
+  const form = $("#predictionForm");
+  const submitButton = $("#submitButton");
+  const errorMessage = $("#errorMessage");
+  const successMessage = $("#successMessage");
+  const loading = $("#loading");
+  const recent = $("#recent");
+  let points = [];
+  let latestId = null;
+
+  function getModelSpec() {
+    const model = modelSelect.value;
+    if (model !== "M5") return { model, forestType: "", lifeForm: "", tolerance: "", ...BASE_MODELS[model] };
+    const forestType = forestTypeSelect.value;
+    const lifeForm = lifeFormSelect.value;
+    const tolerance = toleranceSelect.value;
+    return { model, forestType, lifeForm, tolerance, a: M5_A[`${forestType}|${lifeForm}|${tolerance}`], ...M5_COMMON };
+  }
+  const predict = (dbh, spec = getModelSpec()) => 1.3 + spec.a * Math.pow(1 - Math.exp(-spec.c * dbh), spec.b);
+  const margin95 = (dbh, spec = getModelSpec()) => 1.96 * spec.sigma * Math.pow(dbh, spec.varStruct);
+  const validDbh = (value) => Number.isFinite(value) && value >= 1 && value <= 300;
+  const configReady = !firebaseConfig.apiKey.startsWith("PASTE_") && !firebaseConfig.projectId.startsWith("PASTE_");
+
+  function getVisitorId() {
+    const key = "tai-h-visitor-id";
+    let value = localStorage.getItem(key);
+    if (!value) { value = crypto.randomUUID(); localStorage.setItem(key, value); }
+    return value;
+  }
+
+  function showMessage(element, text = "") {
+    errorMessage.classList.remove("show"); successMessage.classList.remove("show");
+    if (element) { if (text) element.textContent = text; element.classList.add("show"); }
+  }
+
+  function updatePrediction() {
+    const dbh = Number(dbhInput.value);
+    const valid = validDbh(dbh);
+    const spec = getModelSpec();
+    $("#heightValue").textContent = valid ? predict(dbh, spec).toFixed(2) : "—";
+    $("#marginValue").textContent = valid ? margin95(dbh, spec).toFixed(2) : "—";
+    $("#modelSummary").textContent = MODEL_SUMMARIES[spec.model];
+    $("#m5Options").hidden = spec.model !== "M5";
+    submitButton.disabled = !valid || !configReady;
+    drawChart();
+  }
+
+  document.querySelectorAll(".quick button").forEach((button) => button.addEventListener("click", () => { dbhInput.value = button.dataset.value; updatePrediction(); }));
+  dbhInput.addEventListener("input", updatePrediction);
+  [modelSelect, forestTypeSelect, lifeFormSelect, toleranceSelect].forEach((select) => select.addEventListener("change", updatePrediction));
+
+  function renderRecent() {
+    recent.querySelectorAll("b").forEach((node) => node.remove());
+    points.slice(-3).reverse().forEach((point) => {
+      const chip = document.createElement("b");
+      chip.textContent = `${point.model || "M1"} · DBH ${Number(point.dbh.toFixed(1))} cm · ${point.height.toFixed(1)} m`;
+      recent.append(chip);
+    });
+    recent.classList.toggle("show", points.length > 0);
+    $("#pointCount").textContent = points.length.toLocaleString("zh-TW");
+  }
+
+  const canvas = $("#chart");
+  const context = canvas.getContext("2d");
+  function drawChart() {
+    const cssWidth = canvas.clientWidth || 700;
+    const cssHeight = canvas.clientHeight || 430;
+    const ratio = Math.min(devicePixelRatio || 1, 2);
+    canvas.width = Math.round(cssWidth * ratio); canvas.height = Math.round(cssHeight * ratio);
+    context.setTransform(ratio, 0, 0, ratio, 0, 0); context.clearRect(0, 0, cssWidth, cssHeight);
+    const mobile = cssWidth < 520;
+    const m = { top: 32, right: 20, bottom: 55, left: mobile ? 45 : 58 };
+    const innerW = cssWidth - m.left - m.right, innerH = cssHeight - m.top - m.bottom;
+    const x = (value) => m.left + Math.log10(Math.max(1, Math.min(150, value))) / Math.log10(150) * innerW;
+    const y = (value) => m.top + innerH - Math.max(0, Math.min(32, value)) / 32 * innerH;
+    const xTicks = mobile ? [1, 5, 10, 20, 50, 150] : [1, 5, 10, 20, 50, 100, 150];
+    const yTicks = [0, 5, 10, 15, 20, 25, 30];
+    context.font = `${mobile ? 10 : 11}px system-ui`; context.textBaseline = "middle";
+    yTicks.forEach((tick) => { context.beginPath(); context.strokeStyle = "rgba(50,65,55,.13)"; context.moveTo(m.left, y(tick)); context.lineTo(cssWidth - m.right, y(tick)); context.stroke(); context.fillStyle = "#6f7b73"; context.textAlign = "right"; context.fillText(String(tick), m.left - 10, y(tick)); });
+    xTicks.forEach((tick) => { context.save(); context.setLineDash([3, 7]); context.beginPath(); context.strokeStyle = "rgba(50,65,55,.10)"; context.moveTo(x(tick), m.top); context.lineTo(x(tick), cssHeight - m.bottom); context.stroke(); context.restore(); context.fillStyle = "#6f7b73"; context.textAlign = "center"; context.fillText(String(tick), x(tick), cssHeight - m.bottom + 20); });
+    const spec = getModelSpec();
+    const curve = Array.from({length:120},(_,i) => { const dbh = 10 ** (i / 119 * Math.log10(150)); const h = predict(dbh,spec), d = margin95(dbh,spec); return {dbh,h,low:Math.max(0,h-d),high:h+d}; });
+    context.beginPath(); curve.forEach((p,i) => (i ? context.lineTo(x(p.dbh),y(p.high)) : context.moveTo(x(p.dbh),y(p.high)))); curve.slice().reverse().forEach((p) => context.lineTo(x(p.dbh),y(p.low))); context.closePath(); const band=context.createLinearGradient(0,m.top,0,cssHeight-m.bottom); band.addColorStop(0,"rgba(70,130,180,.24)"); band.addColorStop(1,"rgba(70,130,180,.05)"); context.fillStyle=band; context.fill();
+    context.beginPath(); curve.forEach((p,i) => (i ? context.lineTo(x(p.dbh),y(p.h)) : context.moveTo(x(p.dbh),y(p.h)))); context.strokeStyle="#174f83"; context.lineWidth=3; context.lineJoin="round"; context.stroke();
+    points.forEach((point) => { const own = point.id === latestId; context.beginPath(); context.arc(x(point.dbh),y(point.height),own?7:4.5,0,Math.PI*2); context.globalAlpha=own?1:.78; context.fillStyle=own?"#ff5e4d":(MODEL_COLORS[point.model]||MODEL_COLORS.M1); context.fill(); context.globalAlpha=1; context.strokeStyle=own?"#fff":"#1b2820"; context.lineWidth=own?2.3:1.5; context.stroke(); });
+    context.fillStyle="#59665d"; context.font=`600 ${mobile?10:12}px system-ui`; context.textAlign="center"; context.fillText("胸徑 DBH（cm，對數尺度）",m.left+innerW/2,cssHeight-12); context.save(); context.translate(15,m.top+innerH/2); context.rotate(-Math.PI/2); context.fillText("預測樹高（m）",0,0); context.restore();
+  }
+  new ResizeObserver(drawChart).observe(canvas.parentElement);
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault(); const dbh = Number(dbhInput.value); const spec = getModelSpec();
+    if (!validDbh(dbh)) return showMessage(errorMessage,"DBH 請輸入 1–300 cm 之間的數字。");
+    if (!window.taiHCollection) return showMessage(errorMessage,"Firebase 尚未完成設定，請先依上線說明連接資料庫。");
+    submitButton.disabled=true; submitButton.firstElementChild.textContent="正在加入…"; showMessage(null);
+    try { const height=Number(predict(dbh,spec).toFixed(3)); const result=await addDoc(window.taiHCollection,{dbh,height,model:spec.model,forestType:spec.forestType,lifeForm:spec.lifeForm,tolerance:spec.tolerance,visitorId:getVisitorId(),createdAt:serverTimestamp()}); latestId=result.id; showMessage(successMessage,`${spec.model} 的點已加入這片資料森林！`); document.querySelector("#forestChart").scrollIntoView({behavior:"smooth",block:"center"}); }
+    catch(error){ console.error(error); showMessage(errorMessage,"點位沒有成功加入，請確認網路與 Firebase 設定後再試一次。"); }
+    finally { submitButton.firstElementChild.textContent="把我的點加入森林"; updatePrediction(); }
+  });
+
+  if (!configReady) { $("#setupNotice").classList.add("show"); loading.textContent="等待 Firebase 設定"; updatePrediction(); drawChart(); }
+  else {
+    try {
+      const app=initializeApp(firebaseConfig), db=getFirestore(app); window.taiHCollection=collection(db,"predictions");
+      const liveQuery=query(window.taiHCollection,orderBy("createdAt","desc"),limit(2000));
+      onSnapshot(liveQuery,(snapshot)=>{ points=snapshot.docs.map((doc)=>({id:doc.id,...doc.data()})).filter((p)=>Number.isFinite(p.dbh)&&Number.isFinite(p.height)).reverse(); loading.style.display="none"; renderRecent(); drawChart(); },(error)=>{ console.error(error); loading.textContent="資料庫連線失敗"; showMessage(errorMessage,"無法讀取共同點位，請檢查 Firestore 規則與 Firebase 設定。"); });
+    } catch(error) { console.error(error); loading.textContent="Firebase 設定有誤"; showMessage(errorMessage,"Firebase 設定格式有誤，請重新貼上 Web App 設定。"); }
+    updatePrediction();
+  }
+</script>
+</body>
+</html>

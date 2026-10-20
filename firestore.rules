@@ -1,0 +1,44 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /predictions/{predictionId} {
+      allow read: if true;
+
+      allow create: if
+        request.resource.data.keys().hasOnly([
+          'dbh',
+          'height',
+          'model',
+          'forestType',
+          'lifeForm',
+          'tolerance',
+          'visitorId',
+          'createdAt'
+        ]) &&
+        request.resource.data.dbh is number &&
+        request.resource.data.dbh >= 1 &&
+        request.resource.data.dbh <= 300 &&
+        request.resource.data.height is number &&
+        request.resource.data.height >= 0 &&
+        request.resource.data.height <= 80 &&
+        request.resource.data.model in ['M1', 'M2', 'M3', 'M4', 'M5'] &&
+        request.resource.data.forestType is string &&
+        request.resource.data.forestType.size() <= 30 &&
+        request.resource.data.lifeForm is string &&
+        request.resource.data.lifeForm.size() <= 20 &&
+        request.resource.data.tolerance is string &&
+        request.resource.data.tolerance.size() <= 20 &&
+        request.resource.data.visitorId is string &&
+        request.resource.data.visitorId.size() >= 8 &&
+        request.resource.data.visitorId.size() <= 80 &&
+        request.resource.data.createdAt == request.time;
+
+      allow update, delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
